@@ -20,11 +20,12 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
       - name: Append date to index.html
+        env:
+          TEST1: ${{ secrets.TEST1 }}
         run: |
           DATE=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
-          # index.html内の <ul class="l-record"></ul> の直前に<li>要素を挿入
-          # sedコマンドを使用します
-          sed -i `s|\(<ul class=\"l-record\">\)|\1\n<li>Pushed at: $DATE & ${{secrets.TEST1}}</li>|` index.html
+          # index.html内の <ul class="l-record"></ul> の直後に<li>要素を挿入
+          sed -i "s|\(<ul class=\"l-record\">\)|\1\n<li>Pushed at: $DATE & $TEST1</li>|" index.html
 
       - name: Commit changes
         run: |
