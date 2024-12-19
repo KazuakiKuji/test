@@ -1,0 +1,35 @@
+name: Update Record
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  update-record:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v3
+
+      - name: Set Git user
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Append date to index.html
+        run: |
+          DATE=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+          # index.html内の <ul class="l-record"></ul> の直前に<li>要素を挿入
+          # sedコマンドを使用します
+          sed -i "s|\(<ul class=\"l-record\">\)|\1\n<li>Pushed at: $DATE</li>|" index.html
+
+      - name: Commit changes
+        run: |
+          git add index.html
+          git commit -m "Add push timestamp ($DATE)"
+
+      - name: Push changes
+        run: git push
