@@ -12,7 +12,7 @@ jobs:
       - name: Checkout
         run: |
           echo "PR元のブランチ: ${{ github.head_ref }}"
-          if [ "{{ github.head_ref }}" != "stg" ]; then
+          if [ "${{ github.head_ref }}" != "stg" ]; then
             echo "PR元のブランチがstgではありません"
             exit 1
           fi
